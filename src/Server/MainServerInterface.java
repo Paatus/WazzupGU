@@ -53,7 +53,6 @@ public interface MainServerInterface {
 	public int replace(int ID, String newMsg);
 	
 	/**
-
 	  Description:
 	  	Fetches all the messages for the supplied telelphone number
 	  Pre-condition:
@@ -61,6 +60,7 @@ public interface MainServerInterface {
 		recip should be a valid telephone number (rules?)
 		there should be at least 1 message for supplied reciever in the collection
 	  Post-condition:
+	 	sets fetched metadata to true for all messages with supplied recipient
 		returns xml string on success
 		returns "No messages" if no messages are present for supplied recipient
 	  Test-cases:
@@ -68,7 +68,6 @@ public interface MainServerInterface {
 		testXMLStringWrong()
 	*/
 	public String fetch(String recip);
-	
 	
 	/**
 	  Description:
@@ -86,4 +85,35 @@ public interface MainServerInterface {
 	  	testWrongFetchComplete()
 	*/
 	public int fetch_complete(String recip);
+	
+	/**
+	  Description:
+		Checks if supplied nr is a valid telephone number
+	  Pre-condition:
+		recip should be a valid telephone number (rules?)
+	  Post-condition:
+		returns a true on success
+	  	returns a false on fail
+	  Test-cases:
+	  	testAdd()
+	  	testEmptyAdd()
+	*/
+	public boolean is_phonenumber(String nr);
+	
+	/**
+	  Description:
+		Checks if supplied string is a valid message
+	  Pre-condition:
+		str should be non-null and have a length of more than 0
+	  Post-condition:
+		returns a true on success
+	  	returns a false on fail
+	  Test-cases:
+	  	testAdd()
+	  	testEmptyAdd()
+	  	testReplace()
+	  	testWrongReplace()
+	  	testEmptyReplace()
+	*/
+	public boolean is_valid_message(String nr);
 }

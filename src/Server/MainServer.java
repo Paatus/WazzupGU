@@ -1,8 +1,6 @@
 package Server;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Set;
 
 public class MainServer implements MainServerInterface {
@@ -21,7 +19,7 @@ public class MainServer implements MainServerInterface {
 	*/
 	public int add(String msg, String from, String to)
 	{
-		if(isValidID(msg) && isValidID(from) && isValidID(to))
+		if(is_valid_message(msg) && is_phonenumber(from) && is_phonenumber(to))
 		{
 			int num = messages.size()+1;
 			Message message = new Message(num, msg, from, to);
@@ -51,7 +49,6 @@ public class MainServer implements MainServerInterface {
 		return -1;
 	}
 	
-	
 	/**
 	  Description:
 		returns the key to the modified message on success, -1 on fail
@@ -68,7 +65,7 @@ public class MainServer implements MainServerInterface {
 		Message msg = messages.get(ID);
 		if(msg != null)
 		{
-			if(isValidID(newMsg))
+			if(is_valid_message(newMsg))
 			{
 				msg.setMessage(newMsg);
 				messages.remove(ID);
@@ -92,23 +89,28 @@ public class MainServer implements MainServerInterface {
 	*/
 	public String fetch(String recip)
 	{
-		XMLHandler handler = new XMLHandler();
-		int occurencies = 0;
-		Set<Integer> keys = messages.keySet();
-		for(Integer key : keys)
+		if(is_phonenumber(recip))
 		{
-			Message m = messages.get(key);
-			if(m.getRecipient().equals(recip))
+			XMLHandler handler = new XMLHandler();
+			int occurencies = 0;
+			Set<Integer> keys = messages.keySet();
+			for(Integer key : keys)
 			{
-				occurencies++;
-				handler.AddMessage(m);
+				Message m = messages.get(key);
+				if(m.getRecipient().equals(recip))
+				{
+					m.setFetched();
+					occurencies++;
+					handler.AddMessage(m);
+				}
 			}
+			if(occurencies < 1)
+			{
+				return "No messages";
+			}
+			return handler.getDocument();
 		}
-		if(occurencies == 0)
-		{
-			return "No messages";
-		}
-		return handler.getDocument();
+		return "No messages";
 	}
 	
 	
@@ -125,29 +127,39 @@ public class MainServer implements MainServerInterface {
 	*/
 	public int fetch_complete(String recip)
 	{
-		int removed_count = 0;
-		Set<Integer> keys = messages.keySet();
-		for(Integer key : keys)
+		if(is_phonenumber(recip))
 		{
-			Message m = messages.get(key);
-			if(m.getRecipient().equals(recip))
+			int removed_count = 0;
+			Set<Integer> keys = messages.keySet();
+			for(Integer key : keys)
 			{
-				messages.remove(key);
-				removed_count++;
+				Message m = messages.get(key);
+				if(m.getRecipient().equals(recip) && m.isFetched() )
+				{
+					messages.remove(key);
+					removed_count++;
+				}
 			}
+			if(removed_count > 0)
+				return removed_count;
 		}
-		if(removed_count > 0)
-			return removed_count;
 		return -1;
 	}
 	
-	// checks if supplied string is valid and not empty
-	private boolean isValidID(String ID)
+	public boolean is_valid_message(String ID)
 	{
 		if(ID != null && !ID.equals("") && ID.length() > 0)
 		{
 			return true;
 		}
 		return false;
+	}
+
+	public boolean is_phonenumber(String nr) {
+		if(nr.length() == 0 || nr == null || !nr.substring(0, 2).equals("00"))
+		{
+			return false;
+		}
+		return true;
 	}
 }

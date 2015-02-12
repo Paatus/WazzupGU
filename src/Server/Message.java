@@ -6,6 +6,7 @@ public class Message {
 	private String sender;
 	private String recipient;
 	private int ID;
+	private boolean fetched;
 	
 	public Message(int ID, String msg, String from, String to)
 	{
@@ -13,6 +14,7 @@ public class Message {
 		message = msg;
 		sender = from;
 		recipient = to;
+		this.fetched = false;
 	}
 	
 	public void setMessage(String msg)
@@ -38,6 +40,16 @@ public class Message {
 	public String getRecipient()
 	{
 		return recipient;
+	}
+	
+	public void setFetched()
+	{
+		fetched = true;
+	}
+	
+	public boolean isFetched()
+	{
+		return fetched;
 	}
 	
 	public String getXMLString()

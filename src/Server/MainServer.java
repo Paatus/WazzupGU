@@ -32,7 +32,7 @@ public class MainServer implements MainServerInterface {
 	public int replace(int ID, String newMsg)
 	{
 		Message msg = messages.get(ID);
-		if(msg != null)
+		if(msg != null && !msg.isFetched())
 		{
 			if(is_valid_message(newMsg))
 			{

@@ -1,11 +1,9 @@
 package Server;
 
-import java.io.IOException;
 import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -27,15 +25,15 @@ public class XMLHandler {
     	{
     		icBuilder = icFactory.newDocumentBuilder();
     		doc = icBuilder.newDocument();
+            Element rootElem = doc.createElement("Messages");
+            doc.appendChild(rootElem);
     	} catch(Exception e){};
     }
     
     public void AddMessage(Message m)
     {
     	try {
-            Element rootElem = doc.createElement("Messages");
-            doc.appendChild(rootElem);
- 
+    		Element rootElem = doc.getDocumentElement();
             // append child elements to root element
             rootElem.appendChild(birth(doc, m));
         } catch (Exception e) {

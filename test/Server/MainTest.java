@@ -71,8 +71,12 @@ public class MainTest {
 	@Test
 	public void testXMLString()
 	{
-		server.add("hello", "001234124124", "001231241241");
-		String xml = server.fetch("001231241241");
+		server.add("hello", "00gabreielles nr", "00me");
+		server.add("hello i m kenny", "00kennys nr", "00me");
+		server.add("hello i am andreas", "00andreas nr", "00me");
+		server.add("hello again", "00gabreielles nr", "00me");
+		String xml = server.fetch("00me");
+		System.out.println(xml);
 		assertTrue("Expecting returned string to start with xml on success.", xml.substring(0, 5).equals("<?xml"));
 	}
 	

@@ -92,7 +92,7 @@ public class MainServer implements MainServerInterface {
 		return -1;
 	}
 	
-	public boolean is_valid_message(String ID)
+	private boolean is_valid_message(String ID)
 	{
 		if(ID != null && !ID.equals("") && ID.length() > 0 && ID.length() < 65356)
 		{
@@ -101,11 +101,23 @@ public class MainServer implements MainServerInterface {
 		return false;
 	}
 
-	public boolean is_phonenumber(String nr) {
-		if(nr != null && nr.length() > 0 && nr.substring(0, 2).equals("00") && nr.length() < 16)
+	private boolean is_phonenumber(String nr) {
+		if(nr != null && nr.length() > 0 && nr.substring(0, 2).equals("00") && nr.length() < 16 && valid_numbers(nr))
 		{
 			return true;
 		}
 		return false;
+	}
+	
+	private boolean valid_numbers(String nr)
+	{
+		for(int i = 0; i < nr.length();i++)
+		{
+			if(Character.getNumericValue(nr.charAt(i)) < 0)
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }

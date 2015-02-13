@@ -85,35 +85,4 @@ public interface MainServerInterface {
 	  	testWrongFetchComplete()
 	*/
 	public int fetch_complete(String recip);
-	
-	/**
-	  Description:
-		Checks if supplied nr is a valid telephone number
-	  Pre-condition:
-		recip should be a valid telephone number (rules?)
-	  Post-condition:
-		returns a true on success
-	  	returns a false on fail
-	  Test-cases:
-	  	testAdd()
-	  	testEmptyAdd()
-	*/
-	public boolean is_phonenumber(String nr);
-	
-	/**
-	  Description:
-		Checks if supplied string is a valid message
-	  Pre-condition:
-		str should be non-null and have a length of more than 0
-	  Post-condition:
-		returns a true on success
-	  	returns a false on fail
-	  Test-cases:
-	  	testAdd()
-	  	testEmptyAdd()
-	  	testReplace()
-	  	testWrongReplace()
-	  	testEmptyReplace()
-	*/
-	public boolean is_valid_message(String nr);
 }

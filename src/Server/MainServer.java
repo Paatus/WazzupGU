@@ -94,7 +94,7 @@ public class MainServer implements MainServerInterface {
 	
 	public boolean is_valid_message(String ID)
 	{
-		if(ID != null && !ID.equals("") && ID.length() > 0)
+		if(ID != null && !ID.equals("") && ID.length() > 0 && ID.length() < 65356)
 		{
 			return true;
 		}
@@ -102,10 +102,10 @@ public class MainServer implements MainServerInterface {
 	}
 
 	public boolean is_phonenumber(String nr) {
-		if(nr.length() == 0 || nr == null || !nr.substring(0, 2).equals("00"))
+		if(nr != null && nr.length() > 0 && nr.substring(0, 2).equals("00") && nr.length() < 16)
 		{
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 }

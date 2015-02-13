@@ -1,0 +1,6 @@
+- add return types for the methods in the tables
+- fix typos
+- make replace clearer, not IR3
+- use NOT instead of having superflous rules
+- fetch_complete clarify
+- group test-cases

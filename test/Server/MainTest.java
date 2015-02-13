@@ -29,6 +29,22 @@ public class MainTest {
  	}
 	
 	@Test
+	public void testHugeAdd()
+	{
+        String huge_msg = String.format("%0" + 65536 + "d", 0);
+		int ret = server.add(huge_msg, "001234124124", "001231241241");
+		assertFalse("Expected error indication when adding huge message.", ret > 0);
+	}
+
+	@Test
+	public void testWrongNumberAdd()
+	{
+		String my_number = "123123123123123";
+		int ret = server.add("I lolz in da lolinator!", my_number, my_number);
+		assertTrue("Expecting error number from add.", ret < 0);
+	}
+	
+	@Test
 	public void testDelete()
 	{
 		int add_key = server.add("hello", "001234124124", "001231241241");
@@ -69,14 +85,26 @@ public class MainTest {
 	}
 	
 	@Test
+	public void testHugeReplace()
+	{
+        String huge_msg = String.format("%0" + 65536 + "d", 0);
+		int add_key = server.add("lolz", "001234124124", "001231241241");
+		int rep_key = server.replace(add_key, huge_msg);
+		assertFalse("Expected error indication when adding huge message.", rep_key != -1);
+	}
+	
+	@Test
 	public void testXMLString()
 	{
-		server.add("hello", "00gabreielles nr", "00me");
-		server.add("hello i m kenny", "00kennys nr", "00me");
-		server.add("hello i am andreas", "00andreas nr", "00me");
-		server.add("hello again", "00gabreielles nr", "00me");
-		String xml = server.fetch("00me");
-		System.out.println(xml);
+		String first_number = "0046735000001";
+		String second_number = "0046735000002";
+		String third_number = "0046735000003";
+		String my_number = "0046735000004";
+		server.add("hello", first_number, my_number);
+		server.add("hello i m kenny", second_number, my_number);
+		server.add("hello i am andreas", third_number, my_number);
+		server.add("hello again", first_number, my_number);
+		String xml = server.fetch(my_number);
 		assertTrue("Expecting returned string to start with xml on success.", xml.substring(0, 5).equals("<?xml"));
 	}
 	
@@ -86,6 +114,23 @@ public class MainTest {
 		server.add("hello", "001234124124", "001231241241");
 		String xml = server.fetch("9999999999");
 		assertFalse("Expecting returned string to not start with xml on fail.", xml.substring(0, 5).equals("<?xml"));
+	}
+	
+	@Test
+	public void testXMLNumberFormatWrong()
+	{
+		String my_number = "123123123123123";
+		server.add("hello", my_number, my_number);
+		String xml = server.fetch(my_number);
+		assertFalse("Expecting returned string to not start with xml on fail.", xml.substring(0, 5).equals("<?xml"));
+	}
+
+	@Test
+	public void testWrongNumberXML()
+	{
+		String my_number = "123123123123123";
+		int ret = server.add("I lolz in da lolinator!", my_number, my_number);
+		assertTrue("Expecting error number from add.", ret < 0);
 	}
 	
 	@Test
@@ -104,5 +149,15 @@ public class MainTest {
 		server.fetch("001231241241");
 		int res = server.fetch_complete("00102984234");
 		assertTrue("Expecting positive integer for successful fetch completion.", res < 0);
+	}
+	
+	@Test
+	public void testWrongNumberFetchComplete()
+	{
+		String my_number = "123123123123123";
+		server.add("hello", my_number, my_number);
+		server.fetch(my_number);
+		int res = server.fetch_complete(my_number);
+		assertTrue("Expecting error number from fetch completion.", res < 0);
 	}
 }

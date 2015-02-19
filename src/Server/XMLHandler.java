@@ -1,5 +1,7 @@
 package Server;
 
+import java.io.ByteArrayInputStream;
+import java.io.StringReader;
 import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -12,6 +14,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 public class XMLHandler {
 	
@@ -23,14 +26,19 @@ public class XMLHandler {
     // constructor, initializes
     public XMLHandler()
     {
+    	new XMLHandler("Messages");
+    }
+    
+    public XMLHandler(String rootTitle)
+    {
     	try
     	{
     		// create a new document and add a root element
     		icBuilder = icFactory.newDocumentBuilder();
     		doc = icBuilder.newDocument();
-            Element rootElem = doc.createElement("Messages");
+            Element rootElem = doc.createElement(rootTitle);
             doc.appendChild(rootElem);
-    	} catch(Exception e){};
+    	} catch(Exception e){}
     }
     
     // adds a message, this is done once for every message in the fetch-function
@@ -75,6 +83,30 @@ public class XMLHandler {
     	} catch(Exception e) {
     		return e.getMessage();
     	}
+    }
+    
+    public void addAttribute(String name, String value)
+    {
+    	try {
+    		Element rootElem = doc.getDocumentElement();
+    		rootElem.setAttribute(name, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static Document loadXMLFromString(String xmlStr) {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();  
+        DocumentBuilder builder;  
+        try 
+        {  
+            builder = factory.newDocumentBuilder();  
+            Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) ); 
+            return doc;
+        } catch (Exception e) {  
+            e.printStackTrace();  
+        } 
+        return null;
     }
     
 }

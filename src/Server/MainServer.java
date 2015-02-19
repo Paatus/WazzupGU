@@ -94,7 +94,7 @@ public class MainServer implements MainServerInterface {
 	public String fetch(String recip)
 	{
 		// if the recipient is a phone number
-		if(is_phonenumber(recip))
+		if(is_phonenumber(recip) && messages.containsKey(recip))
 		{
 			// initialize a XMLHandler
 			// this initializes a nex xml document

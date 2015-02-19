@@ -59,4 +59,8 @@ public class Message {
 		return p.getDocument();
 	}
 	
+	public String toString() {
+		return  ID + ": " + message + ", " + sender + ", " + recipient + fetched;
+	}
+	
 }

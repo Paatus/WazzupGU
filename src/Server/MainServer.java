@@ -1,12 +1,14 @@
 package Server;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Set;
 
 public class MainServer implements MainServerInterface {
 	
 	// hashmap to store the messages in, using our Message class for storing the messages
-	HashMap<Integer, Message> messages = new HashMap<>(); 
+	HashMap<String, LinkedList<Message>> messages = new HashMap<>(); 
+	HashMap<Integer, String> user_list = new HashMap<>(); 
 	
 	// adds messages to the hashmap
 	public int add(String msg, String from, String to)
@@ -15,28 +17,49 @@ public class MainServer implements MainServerInterface {
 		if(is_valid_message(msg) && is_phonenumber(from) && is_phonenumber(to))
 		{
 			// get a key
-			int num = messages.size()+1;
+			int num = IdManager.generateId();
 			// initialize a new Message class using the data we have
 			Message message = new Message(num, msg, from, to);
 			// insert it at the key
-			messages.put(num, message);
+			LinkedList<Message> temp_list;
+			if (messages.containsKey(to)) {
+				temp_list = messages.get(to);
+			} else {
+				temp_list = new LinkedList<Message>();
+			}
+			temp_list.add(message);
+			user_list.put(new Integer(num), to);
+			messages.put(to, temp_list);
 			// return the key
 			return num;
 		}
 		// if the message was not valid or the from/to was not phone numbers
 		return -1;
 	}
-	
+
 	// delete a message
 	public int delete(int key)
 	{
 		// if there is a message at the supplied key
-		if(messages.get(key) != null)
+		boolean status = false;
+		if(user_list.containsKey(new Integer(key)))
 		{
 			// remove it
-			messages.remove(key);
+			String id_num = user_list.get(new Integer(key));
+			LinkedList<Message> temp_list = messages.get(id_num);
+			for (int i = 0; i < temp_list.size(); ++i) {
+				if (temp_list.get(i).getID() == key) {
+					temp_list.remove(i);
+					status = true;
+					break;
+				}
+			}
+			user_list.remove(new Integer(key));
 			// return the key
-			return key;
+			if (status)
+				return key;
+			else
+				return -1;
 		}
 		// if there was no message at that key, return -1
 		return -1;
@@ -45,21 +68,25 @@ public class MainServer implements MainServerInterface {
 	// replaces the message within the message class, if it has not been fetched yet
 	public int replace(int key, String newMsg)
 	{
-		// get the message at the supplied key
-		Message msg = messages.get(key);
-		// if we got a message (it's not null) and it's not fetched
-		if(msg != null && !msg.isFetched())
+		if(user_list.containsKey(key) && is_valid_message(newMsg))
 		{
-			// if the new message is a valid message
-			if(is_valid_message(newMsg))
-			{
-				// set the new message in the message class we got at key to the new message
-				msg.setMessage(newMsg);
-				// return the key
-				return key;
+		// get the message at the supplied key
+			String usr_id = user_list.get(key);
+			LinkedList<Message> msg_list = messages.get(usr_id);
+			int pos = -1;
+			for (int i = 0; i < msg_list.size(); ++i) {
+				if (msg_list.get(i).getID() == key) {
+					pos = i;
+					break;
+				}
 			}
+			if (pos == -1) {
+				return -1;
+			}
+			Message msg = msg_list.get(pos);
+            msg.setMessage(newMsg);
+            return key;
 		}
-		// if there was no message at the key, or it was fetched, return -1
 		return -1;
 	}
 	
@@ -73,24 +100,24 @@ public class MainServer implements MainServerInterface {
 			// this initializes a nex xml document
 			XMLHandler handler = new XMLHandler();
 			// initialize occurencies counter
+			String usr_id = recip;
+
 			int occurencies = 0;
 			// get all the keys in the hashmap
-			Set<Integer> keys = messages.keySet();
+			LinkedList<Message> msg_list = messages.get(usr_id);
 			// enumerate through them
-			for(Integer key : keys)
+			for(Message msg : msg_list)
 			{
 				// get the message-class at key
-				Message m = messages.get(key);
-				// if the recipient of that message is the same as the supplied recipient
-				if(m.getRecipient().equals(recip))
+				if(msg.getRecipient().equals(recip))
 				{
 					// set the fetched-variable to true
-					m.setFetched();
+					msg.setFetched();
 					// add 1 to occurencies, meaning that we found a message
 					occurencies++;
 					// add the message to the xml
 					// added in the format <msg ID="id" sender="from" recipient="to" message="message" />
-					handler.AddMessage(m);
+					handler.AddMessage(msg);
 				}
 			}
 			// if there was no messages
@@ -109,32 +136,27 @@ public class MainServer implements MainServerInterface {
 	public int fetch_complete(String recip)
 	{
 		// if the recipient is a phone number
-		if(is_phonenumber(recip))
+		if(is_phonenumber(recip) && messages.containsKey(recip))
 		{
-			// initialize a count for how many messages was removed
+			String usr_id = recip;
 			int removed_count = 0;
-			// get all the keys in the hashmap
-			Set<Integer> keys = messages.keySet();
-			// enumerate through them
-			for(Integer key : keys)
+			LinkedList<Message> msg_list = messages.get(usr_id);
+			LinkedList<Message> temp_list = new LinkedList<Message>();
+			for(Message msg : msg_list)
 			{
-				// get the message class at the key
-				Message m = messages.get(key);
-				// if the recipient of the message-class is the same as the supplied and the message is fetched
-				if(m.getRecipient().equals(recip) && m.isFetched() )
+				if(msg.isFetched())
 				{
-					// remove the message from the hashmap
-					messages.remove(key);
-					// add 1 to the count
-					removed_count++;
+					temp_list.add(msg);
 				}
 			}
-			// if messages were removed
+			for (Message msg : temp_list) {
+				user_list.remove(msg.getID());
+				msg_list.remove(msg);
+				removed_count++;
+			}
 			if(removed_count > 0)
-				// return the count
 				return removed_count;
 		}
-		// if the recipient is not a phone number or the count was not above 0
 		return -1;
 	}
 	

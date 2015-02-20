@@ -7,8 +7,8 @@ import java.util.Set;
 public class MainServer implements MainServerInterface {
 	
 	// hashmap to store the messages in, using our Message class for storing the messages
-	HashMap<String, LinkedList<Message>> messages = new HashMap<>(); 
-	HashMap<Integer, String> user_list = new HashMap<>(); 
+	private final static HashMap<String, LinkedList<Message>> messages = new HashMap<>(); 
+	private final static HashMap<Integer, String> user_list = new HashMap<>(); 
 	
 	// adds messages to the hashmap
 	public int add(String msg, String from, String to)
@@ -106,18 +106,15 @@ public class MainServer implements MainServerInterface {
 			// get all the keys in the hashmap
 			LinkedList<Message> msg_list = messages.get(usr_id);
 			// enumerate through them
-			for(Message msg : msg_list)
-			{
-				// get the message-class at key
-				if(msg.getRecipient().equals(recip))
-				{
+			for (int i = 0; i < msg_list.size(); ++i) {
+				if (msg_list.get(i).getRecipient() == recip) {
 					// set the fetched-variable to true
-					msg.setFetched();
+					msg_list.get(i).setFetched();
 					// add 1 to occurencies, meaning that we found a message
 					occurencies++;
 					// add the message to the xml
 					// added in the format <msg ID="id" sender="from" recipient="to" message="message" />
-					handler.AddMessage(msg);
+					handler.AddMessage(msg_list.get(i));
 				}
 			}
 			// if there was no messages

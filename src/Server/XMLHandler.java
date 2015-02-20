@@ -19,14 +19,14 @@ import org.xml.sax.InputSource;
 public class XMLHandler {
 	
 	// initialize Builder stuff
-	DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
-    DocumentBuilder icBuilder;
-    Document doc;
+	private DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
+    private DocumentBuilder icBuilder;
+    private Document doc;
 	
     // constructor, initializes
     public XMLHandler()
     {
-    	new XMLHandler("Messages");
+    	this("Messages");
     }
     
     public XMLHandler(String rootTitle)
@@ -38,7 +38,9 @@ public class XMLHandler {
     		doc = icBuilder.newDocument();
             Element rootElem = doc.createElement(rootTitle);
             doc.appendChild(rootElem);
-    	} catch(Exception e){}
+    	} catch(Exception e){
+    		e.printStackTrace();
+    	}
     }
     
     // adds a message, this is done once for every message in the fetch-function

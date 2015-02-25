@@ -145,10 +145,10 @@ public class MainTest {
 			String second_number = "0046735000002";
 			String third_number = "0046735000003";
 			String my_number = "0046735000004";
-			server.add("hello", first_number, my_number);
-			server.add("hello i m kenny", second_number, my_number);
+			server.add("hello", first_number,              my_number);
+			server.add("hello i m kenny", second_number,   my_number);
 			server.add("hello i am andreas", third_number, my_number);
-			server.add("hello again", first_number, my_number);
+			server.add("hello again", first_number,        my_number);
 			String xml = server.fetch(my_number);
 			assertTrue(
 					"Expecting returned string to start with xml on success.",
@@ -159,6 +159,16 @@ public class MainTest {
 		public void testXMLStringWrong() {
 			server.add("hello", "001234124124", "001231241241");
 			String xml = server.fetch("9999999999");
+			assertFalse(
+					"Expecting returned string to not start with xml on fail.",
+					xml.substring(0, 5).equals("<?xml"));
+		}
+
+		@Test
+		public void testXMLStringDoubleGetWrong() {
+			server.add("hello", "001234124124", "001231241241");
+			server.fetch("001234124124");
+			String xml = server.fetch("001234124124");
 			assertFalse(
 					"Expecting returned string to not start with xml on fail.",
 					xml.substring(0, 5).equals("<?xml"));
@@ -225,5 +235,9 @@ public class MainTest {
 			int res = server.fetch_complete(my_number);
 			assertTrue("Expecting error number from fetch completion.", res < 0);
 		}
+	}
+	
+	public static class MainServerImplementationTest {
+
 	}
 }

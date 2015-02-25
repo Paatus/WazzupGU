@@ -107,7 +107,7 @@ public class MainServer implements MainServerInterface {
 			LinkedList<Message> msg_list = messages.get(usr_id);
 			// enumerate through them
 			for (int i = 0; i < msg_list.size(); ++i) {
-				if (msg_list.get(i).getRecipient() == recip) {
+				if (!msg_list.get(i).isFetched()) {
 					// set the fetched-variable to true
 					msg_list.get(i).setFetched();
 					// add 1 to occurencies, meaning that we found a message

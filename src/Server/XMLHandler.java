@@ -106,7 +106,7 @@ public class XMLHandler {
             Document doc = builder.parse( new InputSource( new StringReader( xmlStr ) ) ); 
             return doc;
         } catch (Exception e) {  
-            e.printStackTrace();  
+            //e.printStackTrace();  
         } 
         return null;
     }

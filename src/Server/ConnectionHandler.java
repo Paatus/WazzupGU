@@ -46,16 +46,22 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
 					switch (node.getNodeName()) {
                         case "request":
                                 request_handling(attrs);
+                                break;
                         case "add_message":
                                 add_message_handler(attrs);
+                                break;
                         case "delete_message":
                                 delete_message_handler(attrs);
+                                break;
                         case "replace_message":
                                 replace_message_handler(attrs);
+                                break;
                         case "fetch_messages":
                                 fetch_messages_handler(attrs);
+                                break;
                         case "fetch_complete":
                                 fetch_complete_handler(attrs);
+                                break;
 					}
 					// System.out.println("Recieved \"" + string + "\" from " +
 					// client.getInetAddress().toString());
@@ -74,6 +80,7 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
         out.print(handler.getDocument());
         out.flush();
 	}
+
 	public void add_message_handler(NamedNodeMap attrs) {
         String content = attrs.getNamedItem("content")
                         .getNodeValue();
@@ -92,6 +99,7 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
         out.print(handler.getDocument());
         out.flush();
 	}
+
 	public void delete_message_handler(NamedNodeMap attrs) {
         int del_key = Integer.parseInt(attrs.getNamedItem("id")
                         .getNodeValue());
@@ -123,12 +131,14 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
         out.print(handler.getDocument());
         out.flush();
 	}
+
 	public void fetch_messages_handler(NamedNodeMap attrs) {
         String xml = server.fetch(user_id);
         System.out.println("fetch for " + user_id);
         out.print(xml);
         out.flush();
 	}
+
 	public void fetch_complete_handler(NamedNodeMap attrs) {
         int fetch_num = server.fetch_complete(user_id);
         if (fetch_num > 0) {

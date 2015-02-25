@@ -1,29 +1,41 @@
 package Server;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerThread {
+public class ServerThread implements Runnable {
 
-	ServerSocket myService;	
-	public ServerThread()
-	{
+	private ServerSocket myService;
+	private boolean turn_off = false;
+
+	public ServerThread() {
 		try {
-		    myService = new ServerSocket(4445);
-		    while(true)
-		    {
+			myService = new ServerSocket(4441);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-		    	Socket s = myService.accept();
-		    	new Thread(new ConnectionHandler(s)).start();
-		    }
+	@Override
+	public void run() {
+		try {
+			while (!turn_off) {
+				Socket s = myService.accept();
+				new Thread(new ConnectionHandler(s)).start();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch(Exception e) {
-			System.out.println(e);
+
+	}
+
+	public void stopRunning() {
+		turn_off = true;
+		try {
+			myService.close();
+		} catch (IOException e) {
 		}
 	}
-	
-	public static void main(String[] args)
-	{
-		new ServerThread();
-	}
+
 }

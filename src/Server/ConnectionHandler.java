@@ -36,9 +36,10 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
 		try {
 			while ((string = in.readLine()) != null) {
 				try {
-					System.out.println("got " + string);
+					System.out.println("got: " + string);
 					Document doc = XMLHandler.loadXMLFromString(string);
 					if (doc == null) {
+						System.out.println("oopsie");
 						break;
 					}
 					Node node = doc.getChildNodes().item(0);
@@ -76,11 +77,10 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
 	public void request_handling(NamedNodeMap attrs) {
         handler = new XMLHandler("accept");
         user_id = attrs.getNamedItem("id").getNodeValue();
-        handler.addAttribute("id", user_id + "");
-        out.print(handler.getDocument());
-        out.flush();
+        handler.addAttribute("id", user_id);
+        String ret_str = handler.getDocument();
+        out.println(ret_str);
 	}
-
 	public void add_message_handler(NamedNodeMap attrs) {
         String content = attrs.getNamedItem("content")
                         .getNodeValue();

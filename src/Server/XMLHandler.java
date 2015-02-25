@@ -83,6 +83,7 @@ public class XMLHandler {
     		// replaces all newlines with nothing, making it all be in one line
     		return writer.getBuffer().toString().replaceAll("\n|\r", "");
     	} catch(Exception e) {
+    		e.printStackTrace();
     		return e.getMessage();
     	}
     }

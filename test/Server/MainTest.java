@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.w3c.dom.Document;
 
 public class MainTest {
 	public static class MainAddTest {
@@ -74,7 +75,7 @@ public class MainTest {
 		@Test
 		public void testWrongDelete() {
 			int add_key = server.add("hello", "001234124124", "001231241241");
-			int del_key = server.delete(add_key - 2);
+			int del_key = server.delete(add_key - 7);
 			assertTrue("Expected response from delete with faulty id to be -1",
 					del_key == -1);
 		}
@@ -237,7 +238,29 @@ public class MainTest {
 		}
 	}
 	
-	public static class MainServerImplementationTest {
+	public static class IntegrationAddTest {
+		MainServer server;
+		Client client;
+		
+		@Before
+		public void initServer() {
+			new ServerThread();
+			client = new Client();
+		}
 
+		@After
+		public void removeServerReference() {
+			server = null;
+		}
+		
+		@Test
+		public void testRequest() {
+			String num = "001234124124";
+			String ret = client.request(num);
+			Document d = XMLHandler.loadXMLFromString(ret);
+			String tag_name = d.getChildNodes().item(0).getNodeName();
+			String id = d.getChildNodes().item(0).getAttributes().getNamedItem("id").getNodeValue();
+			assertTrue("Expected <accept> tag with id metadata back from request", tag_name.equals("accept") && id.equals(num));
+		}
 	}
 }

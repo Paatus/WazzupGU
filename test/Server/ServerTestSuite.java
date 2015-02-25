@@ -9,8 +9,7 @@ import org.junit.runners.Suite;
    MainTest.MainDeleteTest.class,
    MainTest.MainReplaceTest.class,
    MainTest.MainFetchTest.class,
-   MainTest.MainFetchCompleteTest.class
+   MainTest.MainFetchCompleteTest.class,
+   MainTest.IntegrationAddTest.class
 })
-public class ServerTestSuite {
-
-}
+public class ServerTestSuite {}

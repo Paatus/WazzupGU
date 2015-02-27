@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class ServerThread implements Runnable {
 
-	private ServerSocket myService;
+	public ServerSocket myService;
 	private boolean turn_off = false;
 
 	public ServerThread() {

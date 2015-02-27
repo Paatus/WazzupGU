@@ -63,7 +63,7 @@ public class XMLHandler {
     	// create a new element
     	Element message = doc.createElement("msg");
     	// add all the parts
-    	message.setAttribute("ID", ""+m.getID());
+    	message.setAttribute("id", ""+m.getID());
     	message.setAttribute("sender", m.getSender());
     	message.setAttribute("recipient", m.getRecipient());
     	message.setAttribute("message", m.getMessage());

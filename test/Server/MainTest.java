@@ -238,7 +238,7 @@ public class MainTest {
 		}
 	}
 	
-	public static class IntegrationAddTest {
+	/*public static class IntegrationAddTest {
 		MainServer server;
 		Client client;
 		
@@ -262,5 +262,5 @@ public class MainTest {
 			String id = d.getChildNodes().item(0).getAttributes().getNamedItem("id").getNodeValue();
 			assertTrue("Expected <accept> tag with id metadata back from request", tag_name.equals("accept") && id.equals(num));
 		}
-	}
+	}*/
 }

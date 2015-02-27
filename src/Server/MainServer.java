@@ -195,4 +195,8 @@ public class MainServer implements MainServerInterface {
 		// if it did not return false in the loop, return true
 		return true;
 	}
+	public static void reset_server() {
+		MainServer.messages.clear();
+        MainServer.user_list.clear();
+	}
 }

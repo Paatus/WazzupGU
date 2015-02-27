@@ -10,6 +10,6 @@ import org.junit.runners.Suite;
    MainTest.MainReplaceTest.class,
    MainTest.MainFetchTest.class,
    MainTest.MainFetchCompleteTest.class,
-   MainTest.IntegrationAddTest.class
+   //MainTest.IntegrationAddTest.class
 })
 public class ServerTestSuite {}

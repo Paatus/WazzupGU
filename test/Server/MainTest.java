@@ -238,29 +238,4 @@ public class MainTest {
 		}
 	}
 	
-	/*public static class IntegrationAddTest {
-		MainServer server;
-		Client client;
-		
-		@Before
-		public void initServer() {
-			new ServerThread();
-			client = new Client();
-		}
-
-		@After
-		public void removeServerReference() {
-			server = null;
-		}
-		
-		@Test
-		public void testRequest() {
-			String num = "001234124124";
-			String ret = client.request(num);
-			Document d = XMLHandler.loadXMLFromString(ret);
-			String tag_name = d.getChildNodes().item(0).getNodeName();
-			String id = d.getChildNodes().item(0).getAttributes().getNamedItem("id").getNodeValue();
-			assertTrue("Expected <accept> tag with id metadata back from request", tag_name.equals("accept") && id.equals(num));
-		}
-	}*/
 }

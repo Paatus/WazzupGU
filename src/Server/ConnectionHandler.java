@@ -36,7 +36,6 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
 		try {
 			while ((string = in.readLine()) != null) {
 				try {
-					System.out.println("got: " + string);
 					Document doc = XMLHandler.loadXMLFromString(string);
 					if (doc == null) {
 						System.out.println("oopsie");
@@ -87,8 +86,7 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
         String to = attrs.getNamedItem("reciever")
                         .getNodeValue();
         int id = server.add(content, user_id, to);
-        System.out.println("Added '" + content
-                        + "' for recipient " + to);
+
         if (id > 0) {
                 handler = new XMLHandler("message");
                 handler.addAttribute("added", id + "");
@@ -96,7 +94,7 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
                 handler = new XMLHandler("error");
                 handler.addAttribute("reason", "DU SUGER SNOPP");
         }
-        out.print(handler.getDocument());
+        out.println(handler.getDocument());
         out.flush();
 	}
 
@@ -111,7 +109,7 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
                 handler = new XMLHandler("error");
                 handler.addAttribute("reason", "DU SUGER SNOPP");
         }
-        out.print(handler.getDocument());
+        out.println(handler.getDocument());
         out.flush();
 	}
 
@@ -128,14 +126,13 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
                 handler = new XMLHandler("error");
                 handler.addAttribute("reason", "DU SUGER SNOPP");
         }
-        out.print(handler.getDocument());
+        out.println(handler.getDocument());
         out.flush();
 	}
 
 	public void fetch_messages_handler(NamedNodeMap attrs) {
         String xml = server.fetch(user_id);
-        System.out.println("fetch for " + user_id);
-        out.print(xml);
+        out.println(xml);
         out.flush();
 	}
 
@@ -147,7 +144,7 @@ public class ConnectionHandler implements Runnable, ConnectionHandlerInterface {
                 handler = new XMLHandler("error");
                 handler.addAttribute("reason", "DU SUGER SNOPP");
         }
-        out.print(handler.getDocument());
+        out.println(handler.getDocument());
         out.flush();
 	}
 }

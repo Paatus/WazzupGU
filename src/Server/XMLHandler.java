@@ -88,6 +88,21 @@ public class XMLHandler {
     	}
     }
     
+    public static String getDocument(Document d) {
+    	try {
+    		// Java stuff, not important
+    		TransformerFactory tf = TransformerFactory.newInstance();
+    		Transformer transformer = tf.newTransformer();
+    		StringWriter writer = new StringWriter();
+    		transformer.transform(new DOMSource(d), new StreamResult(writer));
+    		// replaces all newlines with nothing, making it all be in one line
+    		return writer.getBuffer().toString().replaceAll("\n|\r", "");
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    		return e.getMessage();
+    	}
+    }
+    
     public Document getDoc() {
     	return doc;
     }

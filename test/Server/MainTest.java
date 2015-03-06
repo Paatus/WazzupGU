@@ -26,7 +26,8 @@ public class MainTest {
 			XMLHandler walla = new XMLHandler("Dummatester");
 			walla.addAttribute("är", "dumma");
 			String xmlstring = walla.getDocument();
-			assertTrue(XMLHandler.loadXMLFromString(xmlstring) == walla.getDoc());
+			Document d = XMLHandler.loadXMLFromString(xmlstring);
+			assertTrue("text goes here", XMLHandler.getDocument(d).equals(walla.getDocument()));
 		}
 	}
 	

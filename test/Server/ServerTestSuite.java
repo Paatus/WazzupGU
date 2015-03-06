@@ -10,6 +10,7 @@ import org.junit.runners.Suite;
    MainTest.MainReplaceTest.class,
    MainTest.MainFetchTest.class,
    MainTest.MainFetchCompleteTest.class,
-   MockConnectionHandler.class
+   MockConnectionHandler.class,
+   MainTest.MainFunctionTest.class
 })
 public class ServerTestSuite {}

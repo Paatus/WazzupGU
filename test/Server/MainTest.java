@@ -8,6 +8,28 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 public class MainTest {
+	public static class MainFunctionTest {
+		static MainServer server;
+		
+		@Before
+		public void initServer() {
+			server = new MainServer();
+		}
+
+		@After
+		public void removeServerReference() {
+			server = null;
+		}
+		
+		@Test
+		public void testXML() {
+			XMLHandler walla = new XMLHandler("Dummatester");
+			walla.addAttribute("är", "dumma");
+			String xmlstring = walla.getDocument();
+			assertTrue(XMLHandler.loadXMLFromString(xmlstring) == walla.getDoc());
+		}
+	}
+	
 	public static class MainAddTest {
 		static MainServer server;
 

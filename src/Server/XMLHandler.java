@@ -88,6 +88,10 @@ public class XMLHandler {
     	}
     }
     
+    public Document getDoc() {
+    	return doc;
+    }
+    
     public void addAttribute(String name, String value)
     {
     	try {
